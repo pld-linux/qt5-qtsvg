@@ -1,5 +1,3 @@
-# TODO:
-# - cleanup
 #
 # Conditional build:
 %bcond_without	qch	# documentation in QCH format
@@ -10,15 +8,17 @@
 Summary:	The Qt5 Svg library
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg
 Name:		qt5-%{orgname}
-Version:	5.2.0
-Release:	0.1
-License:	LGPL v2.1 or GPL v3.0
+Version:	5.3.0
+Release:	1
+License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0
 Group:		X11/Libraries
-Source0:	http://download.qt-project.org/official_releases/qt/5.2/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
-# Source0-md5:	3f6132475f6edcd7b6cfb57650846185
+Source0:	http://download.qt-project.org/official_releases/qt/5.3/%{version}/submodules/%{orgname}-opensource-src-%{version}.tar.xz
+# Source0-md5:	a35e2df8ff2d6b99e4b33443165359f4
 URL:		http://qt-project.org/
-BuildRequires:	qt5-qtbase-devel = %{qtbase_ver}
-BuildRequires:	qt5-qttools-devel = %{qttools_ver}
+BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Widgets-devel >= %{qtbase_ver}
+BuildRequires:	Qt5Xml-devel >= %{qtbase_ver}
 %if %{with qch}
 BuildRequires:	qt5-assistant >= %{qttools_ver}
 %endif
@@ -27,6 +27,7 @@ BuildRequires:	qt5-qmake >= %{qtbase_ver}
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		specflags	-fno-strict-aliasing
@@ -52,20 +53,26 @@ Summary:	The Qt5 Svg library
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg
 Group:		Libraries
 Requires:	Qt5Core >= %{qtbase_ver}
+Requires:	Qt5Gui >= %{qtbase_ver}
+Requires:	Qt5Widgets >= %{qtbase_ver}
 Obsoletes:	qt5-qtsvg
 
 %description -n Qt5Svg
-Qt5 Svg library provides ...
+Qt5 Svg library provides functionality for handling SVG images.
 
 %description -n Qt5Svg -l pl.UTF_8
-Biblioteka Qt5 Svg ...
+Biblioteka Qt5 Svg udostępnia obsługę obrazów SVG.
 
 %package -n Qt5Svg-devel
 Summary:	Qt5 Svg library - development files
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg - pliki programistyczne
 Group:		X11/Development/Libraries
+Requires:	OpenGL-devel
 Requires:	Qt5Core-devel >= %{qtbase_ver}
+Requires:	Qt5Gui-devel >= %{qtbase_ver}
 Requires:	Qt5Svg = %{version}-%{release}
+Requires:	Qt5Widgets-devel >= %{qtbase_ver}
+Requires:	zlib-devel
 Obsoletes:	qt5-qtsvg-devel
 
 %description -n Qt5Svg-devel
@@ -141,10 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # Prepare some files list
 ifecho() {
-	RESULT=`echo $RPM_BUILD_ROOT$2 2>/dev/null`
-	[ "$RESULT" == "" ] && return # XXX this is never true due $RPM_BUILD_ROOT being set
-	r=`echo $RESULT | awk '{ print $1 }'`
-
+	r="$RPM_BUILD_ROOT$2"
 	if [ -d "$r" ]; then
 		echo "%%dir $2" >> $1.files
 	elif [ -x "$r" ] ; then
@@ -157,12 +161,15 @@ ifecho() {
 		return 1
 	fi
 }
+ifecho_tree() {
+	ifecho $1 $2
+	for f in `find $RPM_BUILD_ROOT$2 -printf "%%P "`; do
+		ifecho $1 $2/$f
+	done
+}
 
 echo "%defattr(644,root,root,755)" > examples.files
-ifecho examples %{_examplesdir}/qt5
-for f in `find $RPM_BUILD_ROOT%{_examplesdir}/qt5 -printf "%%P "`; do
-	ifecho examples %{_examplesdir}/qt5/$f
-done
+ifecho_tree examples %{_examplesdir}/qt5/svg
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -172,22 +179,36 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n Qt5Svg
 %defattr(644,root,root,755)
+%doc LGPL_EXCEPTION.txt dist/changes-*
 %attr(755,root,root) %{_libdir}/libQt5Svg.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libQt5Svg.so.5
-%attr(755,root,root) %{qt5dir}/plugins
+%attr(755,root,root) %{qt5dir}/plugins/iconengines/libqsvgicon.so
+%attr(755,root,root) %{qt5dir}/plugins/imageformats/libqsvg.so
 
-%files devel
+%files -n Qt5Svg-devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libQt5Svg.so
 %{_libdir}/libQt5Svg.prl
 %{_includedir}/qt5/QtSvg
 %{_pkgconfigdir}/Qt5Svg.pc
-%{_libdir}/cmake/Qt5Gui/*
-%{_libdir}/cmake/Qt5Svg
-%{qt5dir}/mkspecs/modules/*.pri
+%dir %{_libdir}/cmake/Qt5Svg
+%{_libdir}/cmake/Qt5Svg/Qt5SvgConfig*.cmake
+%{_libdir}/cmake/Qt5Svg/Qt5Svg_QSvgIconPlugin.cmake
+%{_libdir}/cmake/Qt5Svg/Qt5Svg_QSvgPlugin.cmake
+%{qt5dir}/mkspecs/modules/qt_lib_svg.pri
+%{qt5dir}/mkspecs/modules/qt_lib_svg_private.pri
 
 %files doc
 %defattr(644,root,root,755)
-%{_docdir}/qt5-doc/svg
+%{_docdir}/qt5-doc/qtsvg
+
+%if %{with qch}
+%files doc-qch
+%defattr(644,root,root,755)
+%{_docdir}/qt5-doc/qtsvg.qch
+%endif
 
 %files examples -f examples.files
+%defattr(644,root,root,755)
+# XXX: dir shared with qt5-qtbase-examples
+%dir %{_examplesdir}/qt5
