@@ -60,7 +60,7 @@ Obsoletes:	qt5-qtsvg
 %description -n Qt5Svg
 Qt5 Svg library provides functionality for handling SVG images.
 
-%description -n Qt5Svg -l pl.UTF_8
+%description -n Qt5Svg -l pl.UTF-8
 Biblioteka Qt5 Svg udostępnia obsługę obrazów SVG.
 
 %package -n Qt5Svg-devel
