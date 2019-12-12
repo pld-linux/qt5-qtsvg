@@ -8,12 +8,12 @@
 Summary:	The Qt5 Svg library
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg
 Name:		qt5-%{orgname}
-Version:	5.13.2
+Version:	5.14.0
 Release:	1
 License:	LGPL v2.1 with Digia Qt LGPL Exception v1.1 or GPL v3.0
 Group:		X11/Libraries
-Source0:	http://download.qt.io/official_releases/qt/5.13/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
-# Source0-md5:	6f3709ff4954dc3ccf3d615523a9ee37
+Source0:	http://download.qt.io/official_releases/qt/5.14/%{version}/submodules/%{orgname}-everywhere-src-%{version}.tar.xz
+# Source0-md5:	48ccf81077499a09edf06a7487350df1
 URL:		http://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
 BuildRequires:	Qt5Gui-devel >= %{qtbase_ver}
@@ -196,8 +196,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/Qt5Svg.pc
 %dir %{_libdir}/cmake/Qt5Svg
 %{_libdir}/cmake/Qt5Svg/Qt5SvgConfig*.cmake
-%{_libdir}/cmake/Qt5Svg/Qt5Svg_QSvgIconPlugin.cmake
-%{_libdir}/cmake/Qt5Svg/Qt5Svg_QSvgPlugin.cmake
+%{_libdir}/cmake/Qt5Gui/Qt5Gui_QSvgIconPlugin.cmake
+%{_libdir}/cmake/Qt5Gui/Qt5Gui_QSvgPlugin.cmake
 %{qt5dir}/mkspecs/modules/qt_lib_svg.pri
 %{qt5dir}/mkspecs/modules/qt_lib_svg_private.pri
 
