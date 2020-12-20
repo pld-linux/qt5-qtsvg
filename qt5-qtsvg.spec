@@ -58,7 +58,7 @@ Group:		Libraries
 Requires:	Qt5Core >= %{qtbase_ver}
 Requires:	Qt5Gui >= %{qtbase_ver}
 Requires:	Qt5Widgets >= %{qtbase_ver}
-Obsoletes:	qt5-qtsvg
+Obsoletes:	qt5-qtsvg < 5.3.0
 
 %description -n Qt5Svg
 Qt5 Svg library provides functionality for handling SVG images.
@@ -75,7 +75,7 @@ Requires:	Qt5Gui-devel >= %{qtbase_ver}
 Requires:	Qt5Svg = %{version}-%{release}
 Requires:	Qt5Widgets-devel >= %{qtbase_ver}
 Requires:	zlib-devel
-Obsoletes:	qt5-qtsvg-devel
+Obsoletes:	qt5-qtsvg-devel < 5.3.0
 
 %description -n Qt5Svg-devel
 Qt5 Svg library - development files.
