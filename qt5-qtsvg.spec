@@ -28,7 +28,7 @@ BuildRequires:	qt5-assistant >= %{qttools_ver}
 BuildRequires:	qt5-build >= %{qtbase_ver}
 BuildRequires:	qt5-qmake >= %{qtbase_ver}
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.752
+BuildRequires:	rpmbuild(macros) >= 2.016
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
 BuildRequires:	zlib-devel
@@ -126,7 +126,7 @@ Przykłady do biblioteki Qt5 Svg.
 %setup -q -n %{orgname}-everywhere-src-%{version}
 
 %build
-qmake-qt5
+%{qmake_qt5}
 %{__make}
 %{?with_doc:%{__make} docs}
 
