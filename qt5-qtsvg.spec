@@ -57,7 +57,7 @@ Ten pakiet zawiera bibliotekę Qt5 Svg.
 Summary:	The Qt5 Svg library
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg
 Group:		Libraries
-Requires:	Qt5Core >= %{qtbase_ver}
+%requires_eq_to	Qt5Core Qt5Core-devel
 Requires:	Qt5Gui >= %{qtbase_ver}
 Requires:	Qt5Widgets >= %{qtbase_ver}
 Obsoletes:	qt5-qtsvg < 5.3.0
