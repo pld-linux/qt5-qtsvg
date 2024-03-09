@@ -8,12 +8,12 @@
 Summary:	The Qt5 Svg library
 Summary(pl.UTF-8):	Biblioteka Qt5 Svg
 Name:		qt5-%{orgname}
-Version:	5.15.12
+Version:	5.15.13
 Release:	1
 License:	LGPL v3 or GPL v2 or GPL v3 or comercial
 Group:		X11/Libraries
 Source0:	https://download.qt.io/official_releases/qt/5.15/%{version}/submodules/%{orgname}-everywhere-opensource-src-%{version}.tar.xz
-# Source0-md5:	a3156c7f178bc4fe501e9a39ea6e86c6
+# Source0-md5:	480f00693f742c1b12f88385e538f1be
 Patch0:		CVE-2023-32573-qtsvg-5.15.diff
 URL:		https://www.qt.io/
 BuildRequires:	Qt5Core-devel >= %{qtbase_ver}
